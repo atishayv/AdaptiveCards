@@ -9,6 +9,11 @@
 
 using namespace AdaptiveSharedNamespace;
 
+Container::Container(CardElementType derivedType) : CollectionTypeElement(derivedType)
+{
+    PopulateKnownPropertiesSet();
+}
+
 Container::Container() : CollectionTypeElement(CardElementType::Container)
 {
     PopulateKnownPropertiesSet();

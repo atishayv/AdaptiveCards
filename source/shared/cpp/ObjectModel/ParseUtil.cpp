@@ -422,12 +422,14 @@ namespace AdaptiveSharedNamespace
         std::unique_ptr<Json::CharReader> reader(readerBuilder.newCharReader());
 
         Json::Value jsonValue;
-
-        const bool ok = reader->parse(jsonString.data(), jsonString.data() + jsonString.size(), &jsonValue, nullptr);
+        std::string errors;
+        const bool ok = reader->parse(jsonString.data(), jsonString.data() + jsonString.size(), &jsonValue, &errors);
 
         if (!ok)
         {
-            throw AdaptiveCardParseException(ErrorStatusCode::InvalidJson, "Expected JSON Object");
+            std::ostringstream exceptionMsg{};
+            exceptionMsg << "Expected JSON Object (" << errors << ")";
+            throw AdaptiveCardParseException(ErrorStatusCode::InvalidJson, exceptionMsg.str());
         }
 
         return jsonValue;

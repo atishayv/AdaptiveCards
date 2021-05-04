@@ -3,18 +3,24 @@
 
 #pragma once
 
+#include "BaseCardElement.h"
+
 namespace AdaptiveSharedNamespace
 {
+    class BaseCardElement;
     class TableCell;
 
-    class TableRow
+    class TableRow : public BaseCardElement
     {
     public:
+        TableRow();
         TableRow(const TableRow&) = default;
         TableRow(TableRow&&) = default;
         TableRow& operator=(const TableRow&) = default;
         TableRow& operator=(TableRow&&) = default;
         virtual ~TableRow() = default;
+
+        Json::Value SerializeToJsonValue() const override;
 
         std::vector<std::shared_ptr<TableCell>>& GetCells();
         const std::vector<std::shared_ptr<TableCell>>& GetCells() const;
@@ -28,5 +34,30 @@ namespace AdaptiveSharedNamespace
 
         ContainerStyle GetStyle() const;
         void SetStyle(const ContainerStyle value);
+
+    private:
+        void PopulateKnownPropertiesSet();
+
+        ContainerStyle m_style;
+
+        HorizontalAlignment m_horizontalCellContentAlignment;
+        VerticalAlignment m_verticalCellContentAlignment;
+
+        std::vector<std::shared_ptr<AdaptiveSharedNamespace::TableCell>> m_cells;
+        std::optional<bool> m_rtl;
+    };
+
+    class TableRowParser : public BaseCardElementParser
+    {
+    public:
+        TableRowParser() = default;
+        TableRowParser(const TableRowParser&) = default;
+        TableRowParser(TableRowParser&&) = default;
+        TableRowParser& operator=(const TableRowParser&) = default;
+        TableRowParser& operator=(TableRowParser&&) = default;
+        virtual ~TableRowParser() = default;
+
+        std::shared_ptr<BaseCardElement> Deserialize(ParseContext& context, const Json::Value& root) override;
+        std::shared_ptr<BaseCardElement> DeserializeFromString(ParseContext& context, const std::string& jsonString) override;
     };
 }

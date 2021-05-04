@@ -7,6 +7,8 @@
 
 namespace AdaptiveSharedNamespace
 {
+    class BaseCardElement;
+
     class TableCell : public Container
     {
     public:
@@ -16,9 +18,6 @@ namespace AdaptiveSharedNamespace
         TableCell& operator=(const TableCell&) = default;
         TableCell& operator=(TableCell&&) = default;
         virtual ~TableCell() = default;
-
-    private:
-        //void PopulateKnownPropertiesSet();
     };
 
     class TableCellParser : public ContainerParser
